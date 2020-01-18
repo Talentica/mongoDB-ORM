@@ -1,0 +1,27 @@
+{
+  "name": "mongodb-orm",
+  "version": "1.0.0",
+  "description": "The best ORM for nodejs",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "prebuild": "./node_modules/tslint/bin/tslint -c tslint.json 'src/**/*.ts'",
+    "build": "./node_modules/typescript/bin/tsc",
+    "test": "node app.js"
+  },
+  "keywords": [
+    "nodejs",
+    "orm",
+    "mongodb",
+    "mongoose"
+  ],
+  "author": "Talentica",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^13.1.8",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.5"
+  }
+}
