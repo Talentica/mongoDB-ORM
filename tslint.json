@@ -5,7 +5,25 @@
   "rules": {
     "no-console": [false, "log", "error"],
     "trailing-comma": [false, { "multiline": "always", "singleline": "never" }],
-    "semicolon": [false, "always"]
+    "semicolon": [false, "always"],
+    "quotemark": [false, "single", "avoid-escape", "avoid-template"],
+    "only-arrow-functions": [
+      false,
+      "allow-declarations",
+      "allow-named-functions"
+    ],
+    "space-before-function-paren": [
+      false,
+      { "anonymous": "always", "named": "never", "asyncArrow": "always" }
+    ],
+    "ordered-imports": [
+      false,
+      {
+        "import-sources-order": "lowercase-last",
+        "named-imports-order": "lowercase-first"
+      }
+    ],
+    "member-access": [false, "check-accessor"]
   },
   "rulesDirectory": []
 }
