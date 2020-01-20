@@ -7,8 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "prebuild": "./node_modules/tslint/bin/tslint -c tslint.json 'src/**/*.ts'",
-    "build": "./node_modules/typescript/bin/tsc",
+    "prebuild": "tslint -c tslint.json 'src/**/*.ts'",
+    "build": "tsc",
     "test": "node app.js"
   },
   "keywords": [
