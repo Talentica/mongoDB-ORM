@@ -10,8 +10,8 @@
     "clean": "rimraf build",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "compile": "tsc",
-    "build": "npm-run-all clean lint compile",
-    "test": "node app.js"
+    "test": "node ./build/test.js",
+    "build": "npm-run-all clean lint compile test"
   },
   "keywords": [
     "nodejs",

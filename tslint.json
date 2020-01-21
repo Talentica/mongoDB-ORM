@@ -5,7 +5,41 @@
   "rules": {
     "no-console": [false, "log", "error"],
     "trailing-comma": [false, { "multiline": "always", "singleline": "never" }],
-    "semicolon": [false, "always"]
+    "semicolon": [false, "always"],
+    "quotemark": [false, "single", "avoid-escape", "avoid-template"],
+    "only-arrow-functions": [
+      false,
+      "allow-declarations",
+      "allow-named-functions"
+    ],
+    "space-before-function-paren": [
+      false,
+      { "anonymous": "always", "named": "never", "asyncArrow": "always" }
+    ],
+    "ordered-imports": [
+      false,
+      {
+        "import-sources-order": "lowercase-last",
+        "named-imports-order": "lowercase-first"
+      }
+    ],
+    "member-access": [false, "check-accessor"],
+    "ban-types": {
+      "options": [
+        ["Object", "Avoid using the `Object` type. Did you mean `object`?"],
+        ["Boolean", "Avoid using the `Boolean` type. Did you mean `boolean`?"],
+        ["Number", "Avoid using the `Number` type. Did you mean `number`?"],
+        ["String", "Avoid using the `String` type. Did you mean `string`?"],
+        ["Symbol", "Avoid using the `Symbol` type. Did you mean `symbol`?"]
+      ]
+    },
+    "interface-over-type-literal": false,
+    "max-classes-per-file": [false, 5, "exclude-class-expressions"],
+    "no-trailing-whitespace": [false, "ignore-comments"],
+    "interface-name": [false, "never-prefix"],
+    "prefer-const": false,
+    "object-literal-shorthand": false,
+    "object-literal-sort-keys": false
   },
   "rulesDirectory": []
 }

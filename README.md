@@ -2,9 +2,10 @@
 
 ## Tasks
 
-- package.json: done
-- tslint: done
-- tsconfig: done
+- Add mongoose
+- Connect to mongodb
+- Create collection through decorator
+- Get the work reviewed
 
 ## Backlog
 
