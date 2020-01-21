@@ -1,5 +1,4 @@
-import { field } from "./decorators/field";
-import { document } from "./decorators/document";
+import { document, field } from "./decorators";
 
 @document
 class Person {
@@ -14,15 +13,10 @@ class Person {
     this.lastname = lastname;
   }
 
-  greet() {
-    console.log(`hello, ${this.fistname} ${this.lastname}!`);
+  getFullName() {
+    return `${this.fistname} ${this.lastname}`
   }
 }
 
-const p: any = new Person("John", "Doe");
-console.log(Person.toString());
-p.greet();
-// p.save();
-// console.log(p.foo);
-console.log(p.hello);
-console.log(p.newProperty);
+const p = new Person('A', 'B')
+const p2 = new Person('C', 'D')

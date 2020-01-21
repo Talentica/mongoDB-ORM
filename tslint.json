@@ -33,7 +33,13 @@
         ["Symbol", "Avoid using the `Symbol` type. Did you mean `symbol`?"]
       ]
     },
-    "interface-over-type-literal": false
+    "interface-over-type-literal": false,
+    "max-classes-per-file": [false, 5, "exclude-class-expressions"],
+    "no-trailing-whitespace": [false, "ignore-comments"],
+    "interface-name": [false, "never-prefix"],
+    "prefer-const": false,
+    "object-literal-shorthand": false,
+    "object-literal-sort-keys": false
   },
   "rulesDirectory": []
 }
