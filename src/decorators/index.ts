@@ -7,34 +7,42 @@
  */
 
 interface Field {
-  name: string
-  required: boolean
+    name: string;
+    required: boolean;
 }
 
 interface Collection {
-  name: string
-  fields: Field[]
+    name: string;
+    fields: Field[];
 }
 
 const collection: Collection = {
-  name: '',
-  fields: []
-}
+    name: '',
+    fields: [],
+};
 
 // Add new property : Override (extend) the constructor
 export function document<T extends { new(...args: any[]) }>(constructor: T) {
-  collection.name = constructor.name
-  console.log(collection)
-  return class extends constructor {
-    newProperty = "new property";
-  };
+    collection.name = constructor.name;
+    console.log(collection);
+    return class extends constructor {
+        newProperty = 'new property';
+    };
 }
 
 export function field(type: string, required: boolean) {
-  return function (target: any, propertyKey: string) {
-    collection.fields.push({
-      name: propertyKey,
-      required: required
-    })
-  };
+    return (target: any, propertyKey: string) => {
+        collection.fields.push({
+            name: propertyKey,
+            required,
+        });
+    };
+}
+
+export function foo() {
+    console.log('I am foo at decorators');
+}
+
+export function foo2() {
+    console.log('I am foo2 at decorators');
 }
