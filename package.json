@@ -16,7 +16,9 @@
     "license": "ISC",
     "devDependencies": {
         "@types/jest": "^24.9.0",
+        "@types/mongoose": "^5.5.42",
         "jest": "^25.1.0",
+        "mongoose": "^5.8.9",
         "rimraf": "^3.0.0",
         "ts-jest": "^24.3.0",
         "ts-node": "^8.6.2",
