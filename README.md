@@ -15,6 +15,9 @@ $ npm start
 # development - watch mode
 $ npm run start:dev
 
+# lint
+$ npm run lint
+
 # build
 $ npm run build
 
