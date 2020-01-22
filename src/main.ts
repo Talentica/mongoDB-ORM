@@ -1,9 +1,21 @@
-import { foo, foo2 } from './decorators/index';
-import { bar, bar2 } from './services/index';
+import { document, field } from "./decorators";
 
-console.log('Hello World');
+@document
+class Person {
+    @field("string", true)
+    fistname: string;
+    
+    @field("string", true)
+    lastname: string;
+    
+    constructor(firstname: string, lastname: string) {
+        this.fistname = firstname;
+        this.lastname = lastname;
+    }
+    getFullName() {
+        return `${this.fistname} ${this.lastname}`;
+    }
+}
 
-foo();
-bar();
-foo2();
-bar2();
+const p = new Person("A", "B");
+const p2 = new Person("C", "D");

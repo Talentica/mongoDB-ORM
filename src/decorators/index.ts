@@ -21,10 +21,8 @@ const collection: Collection = {
     fields: [],
 };
 
-// Add new property : Override (extend) the constructor
 export function document<T extends { new(...args: any[]) }>(constructor: T) {
     collection.name = constructor.name;
-    console.log(collection);
     return class extends constructor {
         newProperty = 'new property';
     };
@@ -37,12 +35,4 @@ export function field(type: string, required: boolean) {
             required,
         });
     };
-}
-
-export function foo() {
-    console.log('I am foo at decorators');
-}
-
-export function foo2() {
-    console.log('I am foo2 at decorators');
 }
