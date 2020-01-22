@@ -1,9 +1,7 @@
 export function bar() {
-  console.log("I am bar at services");
-  return "bar";
+    console.log('I am bar at services');
 }
 
 export function bar2() {
-  console.log("I am bar2 at services");
-  return 2;
+    console.log('I am bar2 at services');
 }

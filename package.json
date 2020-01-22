@@ -1,27 +1,42 @@
 {
-  "name": "mongodb-orm",
-  "version": "1.0.0",
-  "description": "The best ORM for nodejs",
-  "main": "app.js",
-  "directories": {
-    "doc": "docs"
-  },
-  "scripts": {
-    "prebuild": "./node_modules/tslint/bin/tslint -c tslint.json 'src/**/*.ts'",
-    "build": "./node_modules/typescript/bin/tsc",
-    "test": "node app.js"
-  },
-  "keywords": [
-    "nodejs",
-    "orm",
-    "mongodb",
-    "mongoose"
-  ],
-  "author": "Talentica",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/node": "^13.1.8",
-    "tslint": "^5.20.1",
-    "typescript": "^3.7.5"
-  }
+    "name": "orm",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build": "rimraf dist && tsc -p tsconfig.build.json",
+        "start": "ts-node -r tsconfig-paths/register src/main.ts",
+        "start:dev": "nodemon",
+        "start:prod": "node dist/main.js",
+        "lint": "tslint -p tsconfig.json -c tslint.json",
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "test:cov": "jest --coverage"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/jest": "^24.9.0",
+        "jest": "^25.1.0",
+        "rimraf": "^3.0.0",
+        "ts-jest": "^24.3.0",
+        "ts-node": "^8.6.2",
+        "tsconfig-paths": "^3.9.0",
+        "tslint": "^5.20.1",
+        "typescript": "^3.7.5"
+    },
+    "jest": {
+        "moduleFileExtensions": [
+            "js",
+            "json",
+            "ts"
+        ],
+        "rootDir": "src",
+        "testRegex": ".spec.ts$",
+        "transform": {
+            "^.+\\.(t|j)s$": "ts-jest"
+        },
+        "coverageDirectory": "../coverage",
+        "testEnvironment": "node"
+    }
 }
