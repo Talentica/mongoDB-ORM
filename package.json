@@ -37,5 +37,8 @@
         },
         "coverageDirectory": "../coverage",
         "testEnvironment": "node"
+    },
+    "dependencies": {
+        "mongoose": "^5.8.9"
     }
 }
