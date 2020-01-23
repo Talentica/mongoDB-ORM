@@ -1,21 +1,28 @@
 import { document, field } from './decorators';
 
 @document
-class Person {
-  @field('string', true)
-  firstname: string;
+class Users {
+  @field(String, true)
+  name: string;
 
-  @field('string', true)
-  lastname: string;
-
-  constructor(firstname: string, lastname: string) {
-    this.firstname = firstname;
-    this.lastname = lastname;
-  }
-  getFullName() {
-    return `${this.firstname} ${this.lastname}`;
-  }
+  @field(Number, true)
+  age: number;
 }
 
-const p = new Person('A', 'B');
-const p2 = new Person('C', 'D');
+@document
+class Accounts {
+  @field(Number, true)
+  id: number;
+
+  @field(String, true)
+  name: string;
+}
+
+@document
+class Products {
+  @field(Number, true)
+  id: number;
+
+  @field(String, true)
+  code: string;
+}

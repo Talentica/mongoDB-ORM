@@ -33,9 +33,10 @@ $ npm run test:cov
 
 ## Tasks
 
-- Add mongoose
-- Connect to mongodb
-- Create collection through decorator
+- Add mongoose: done
+- Connect to mongodb: done
+- Create collection through decorator: done
+- Users should be able to use methods like 'save', 'findOne' etc
 - Get the work reviewed
 
 ## Backlog
