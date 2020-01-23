@@ -40,7 +40,5 @@
         "coverageDirectory": "../coverage",
         "testEnvironment": "node"
     },
-    "dependencies": {
-        
-    }
+    "dependencies": {}
 }
