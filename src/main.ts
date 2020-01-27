@@ -1,28 +1,25 @@
-import { document, field } from './decorators';
+import { defaultMetadataStorage } from './metadata/metadata.storage';
+import { FieldMetadata } from './metadata/field.metadata';
+export * from './decorators/document/document.decorator';
+export * from './decorators/field/field.decorator';
 
-@document
-class Users {
-    @field(String, true)
-    name: string;
+export function createCollection(mongoose: any, documents: Function[]) {
+    if (documents && documents.length) {
+        documents.forEach((document) => {
+            const [collectionMetadata] = defaultMetadataStorage.findCollectionMetadatasForClasses([document]);
+            const fieldMetadatas = defaultMetadataStorage.findFieldMetadatasForClasses([document]);
 
-    @field(Number, true)
-    age: number;
-}
+            const fieldData = {};
+            fieldMetadatas.forEach((fieldMetadata: FieldMetadata) => {
+                fieldData[fieldMetadata.propertyName] = fieldMetadata.type;
+            });
 
-@document
-class Accounts {
-    @field(Number, true)
-    id: number;
-
-    @field(String, true)
-    name: string;
-}
-
-@document
-class Products {
-    @field(Number, true)
-    id: number;
-
-    @field(String, true)
-    code: string;
+            console.log(fieldData);
+            const schema = new mongoose.Schema(fieldData);
+            console.log(schema);
+            const model = mongoose.model(collectionMetadata.name, schema);
+            console.log(model);
+        });
+        console.log('Created...!');
+    }
 }
