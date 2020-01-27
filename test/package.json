@@ -1,0 +1,21 @@
+{
+    "name": "test",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "start": "ts-node -r tsconfig-paths/register src/main.ts",
+        "start:dev": "nodemon"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@types/mongoose": "^5.5.42",
+        "mongoose": "^5.8.9"
+    },
+    "devDependencies": {
+        "ts-node": "^8.6.2",
+        "tsconfig-paths": "^3.9.0",
+        "tslint": "^5.20.1",
+        "typescript": "^3.7.5"
+    }
+}
