@@ -17,12 +17,12 @@ export class MetadataStorage {
         this.fieldMetadatas.push(metadata);
     }
 
-    findCollectionMetadatasForClasses(classes: Function[]): CollectionMetadata[] {
-        return this.collectionMetadatas.filter(metadata => classes.indexOf(metadata.target) !== -1);
+    findCollectionMetadatasForClass(target: Function): CollectionMetadata[] {
+        return this.collectionMetadatas.filter(metadata => metadata.target === target);
     }
 
-    findFieldMetadatasForClasses(classes: Function[]): FieldMetadata[] {
-        return this.fieldMetadatas.filter(metadata => classes.indexOf(metadata.target) !== -1);
+    findFieldMetadatasForClass(target: Function): FieldMetadata[] {
+        return this.fieldMetadatas.filter(metadata => metadata.target === target);
     }
 }
 
