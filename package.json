@@ -2,6 +2,7 @@
     "name": "orm",
     "version": "1.0.0",
     "description": "",
+    "main": "dist/main.js",
     "scripts": {
         "build": "rimraf dist && tsc -p tsconfig.build.json",
         "start": "ts-node -r tsconfig-paths/register src/main.ts",
