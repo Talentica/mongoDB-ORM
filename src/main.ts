@@ -6,8 +6,8 @@ export * from './decorators/field/field.decorator';
 export function createCollection(mongoose: any, documents: Function[]) {
     if (documents && documents.length) {
         documents.forEach((document) => {
-            const [collectionMetadata] = defaultMetadataStorage.findCollectionMetadatasForClasses([document]);
-            const fieldMetadatas = defaultMetadataStorage.findFieldMetadatasForClasses([document]);
+            const [collectionMetadata] = defaultMetadataStorage.findCollectionMetadatasForClass(document);
+            const fieldMetadatas = defaultMetadataStorage.findFieldMetadatasForClass(document);
 
             const fieldData = {};
             fieldMetadatas.forEach((fieldMetadata: FieldMetadata) => {
