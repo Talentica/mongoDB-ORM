@@ -8,6 +8,20 @@ $ npm install
 
 ## Running the app
 
+test folder in the main folder contains a test project. Use the below steps to run the app :
+
+```
+cd mongoDB-ORM/
+npm run build
+npm link
+
+cd test/
+npm link orm
+npm run start:dev
+```
+
+## Other commands :
+
 ```bash
 # development
 $ npm start
@@ -33,13 +47,13 @@ $ npm run test:cov
 
 ## Tasks
 
-- Add mongoose: done
-- Connect to mongodb: done
-- Create collection through decorator: done
-- Users should be able to use methods like 'save', 'findOne' etc
-- Get the work reviewed
+-   Add mongoose: done
+-   Connect to mongodb: done
+-   Create collection through decorator: done
+-   Users should be able to use methods like 'save', 'findOne' etc
+-   Get the work reviewed
 
 ## Backlog
 
-- /decorators/ create decorator for creating @document and @field
-- /services/
+-   /decorators/ create decorator for creating @document and @field
+-   /services/
