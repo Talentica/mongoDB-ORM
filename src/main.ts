@@ -4,16 +4,26 @@ import * as mongoose from 'mongoose';
 export * from './decorators/document/document.decorator';
 export * from './decorators/field/field.decorator';
 
-// TODO: take as config
-mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true });
+import mongodb = require('mongodb');
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-    console.log('Connected...!');
-});
+export async function connect(uris: string, options: any): Promise<mongoose.Mongoose>;
+export async function connect(uris: string, callback: (err: mongodb.MongoError) => void): Promise<mongoose.Mongoose>;
+export async function connect(uris: string, options: any, callback: (err: mongodb.MongoError) => void): Promise<mongoose.Mongoose>;
 
-export function createCollection(documents: Function[]) {
+export async function connect(uris: string, options?: any, callback?: (err: mongodb.MongoError) => void): Promise<mongoose.Mongoose> {
+    let mongooseConnect = mongoose.connect(uris, options, callback);
+    const db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', () => {
+        console.log('Connected...!');
+    });
+    console.log(defaultMetadataStorage.getAllCollectionMetadata());
+    return mongooseConnect;
+}
+
+
+
+function createCollection(documents: Function[]) {
     if (documents && documents.length) {
         documents.forEach((document) => {
             const [collectionMetadata] = defaultMetadataStorage.findCollectionMetadatasForClass(document);

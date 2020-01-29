@@ -9,6 +9,9 @@ export class MetadataStorage {
     private collectionMetadatas: CollectionMetadata[] = [];
     private fieldMetadatas: FieldMetadata[] = [];
 
+    getAllCollectionMetadata(): CollectionMetadata[] {
+        return this.collectionMetadatas;
+    }
     addCollectionMetadata(metadata: CollectionMetadata) {
         this.collectionMetadatas.push(metadata);
     }
