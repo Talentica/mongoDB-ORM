@@ -6,6 +6,7 @@
     "scripts": {
         "build": "rimraf dist && tsc -p tsconfig.build.json",
         "start": "ts-node -r tsconfig-paths/register src/main.ts",
+        "start:example": "ts-node -r tsconfig-paths/register example/example.ts",
         "start:dev": "nodemon",
         "start:prod": "node dist/main.js",
         "lint": "tslint -p tsconfig.json -c tslint.json",
