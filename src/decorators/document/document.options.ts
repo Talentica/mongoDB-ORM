@@ -3,5 +3,5 @@ export interface DocumentOptions {
     /**
      * Collection name.
      */
-    name?: string;
+    name: string;
 }
