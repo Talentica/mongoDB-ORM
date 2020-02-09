@@ -5,8 +5,7 @@ import { defaultMetadataStorage } from '../../metadata/metadata.storage';
 /**
  * This decorator is used to mark class properties as document fields.
  */
-export function Field(options: FieldOptions) {
-    console.log('In Field decorator');
+export function field(options: FieldOptions) {
     return (object: Object, propertyName: string) => {
         const metadata = new FieldMetadata(object.constructor, propertyName, options.type);
         defaultMetadataStorage.addFieldMetadata(metadata);
