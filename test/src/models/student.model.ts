@@ -1,7 +1,7 @@
 import { document, field } from 'orm';
 
-@document({ name: 'company' })
-export class Company {
+@document({ name: 'student' })
+export class Student {
 
     @field({ type: 'Number', required: true })
     id: number;
