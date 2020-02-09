@@ -1,14 +1,14 @@
-import { Employee } from '../models/employee.model'
+import { Student } from '../models/student.model'
 import * as express from 'express'
 
-const EmployeeModel = (new Employee() as any).getModel()
+const StudentModel = (new Student() as any).getModel()
 
 export function create(req: express.Request, res: express.Response) {
     const data = req.body
-    const emp: any = new EmployeeModel()
-    emp.id = data.id
-    emp.name = data.name
-    emp.save((err, result) => {
+    const s: any = new StudentModel()
+    s.id = data.id
+    s.name = data.name
+    s.save((err, result) => {
         if (err) {
             res.send(err)
         }
@@ -17,7 +17,7 @@ export function create(req: express.Request, res: express.Response) {
 }
 
 export function fetch(req, res) {
-    EmployeeModel.find((err, result) => {
+    StudentModel.find((err, result) => {
         if (err) {
             res.send(err)
         }
