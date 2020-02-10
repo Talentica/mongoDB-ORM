@@ -4,6 +4,7 @@
     "description": "",
     "scripts": {
         "start": "ts-node -r tsconfig-paths/register src/app.ts",
+        "lint": "tslint -p tsconfig.json -c tslint.json",
         "start:dev": "nodemon"
     },
     "author": "",

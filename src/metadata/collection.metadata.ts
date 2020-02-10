@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose'
+import * as mongoose from 'mongoose';
 
 export class CollectionMetadata {
 
@@ -9,7 +9,7 @@ export class CollectionMetadata {
     constructor(
         target: Function,
         name: string,
-        model: mongoose.Model<any>
+        model: mongoose.Model<any>,
     ) {
         this.target = target;
         this.name = name;
