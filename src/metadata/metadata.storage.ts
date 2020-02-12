@@ -6,19 +6,19 @@ import { FieldMetadata } from './field.metadata';
  */
 export class MetadataStorage {
 
-    private collectionMetadatas: CollectionMetadata[] = [];
+    private collectionMetadataMap: { [target: string]: CollectionMetadata };
     private fieldMetadatas: FieldMetadata[] = [];
 
     addCollectionMetadata(metadata: CollectionMetadata) {
-        this.collectionMetadatas.push(metadata);
+        this.collectionMetadataMap[metadata.target.name] = metadata;
     }
 
     addFieldMetadata(metadata: FieldMetadata) {
         this.fieldMetadatas.push(metadata);
     }
 
-    findCollectionMetadatasForClass(target: Function): CollectionMetadata[] {
-        return this.collectionMetadatas.filter(metadata => metadata.target === target);
+    findCollectionMetadatasForClass(target: Function): CollectionMetadata {
+        return this.collectionMetadataMap[target.name];
     }
 
     findFieldMetadatasForClass(target: Function): FieldMetadata[] {

@@ -1,5 +1,6 @@
 import { Teacher } from '../models/teacher.model';
 import * as express from 'express';
+import { getRepository } from 'orm';
 
 const TeacherModel = (new Teacher() as any).getModel();
 
@@ -17,6 +18,11 @@ export function create(req: express.Request, res: express.Response) {
 }
 
 export function fetch(req, res) {
+
+    const teacherRepo = getRepository<Teacher>(Teacher);
+
+    const s = teacherRepo.find();
+
     TeacherModel.find((err, result) => {
         if (err) {
             res.send(err);

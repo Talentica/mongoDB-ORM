@@ -8,17 +8,24 @@ import * as mongoose from 'mongoose';
  * This decorator is used to mark classes that they gonna be Collections.
  */
 export function document(options: DocumentOptions) {
-    return function _document<T extends { new(...args: any[]) }>(constructor: T) {
-        const Model = createModel(constructor, options.name);
-        const metaData = new CollectionMetadata(constructor, options.name, Model);
+    return (target: Function) => {
+        const model = createModel(target, options.name);
+        const metaData = new CollectionMetadata(target, options.name, model);
         defaultMetadataStorage.addCollectionMetadata(metaData);
-        return class extends constructor {
-            getModel = () => {
-                return Model;
-            }
-        };
     };
 }
+// export function document(options: DocumentOptions) {
+//     return function _document<T extends { new(...args: any[]) }>(constructor: T) {
+//         const Model = createModel(constructor, options.name);
+//         const metaData = new CollectionMetadata(constructor, options.name, Model);
+//         defaultMetadataStorage.addCollectionMetadata(metaData);
+//         return class extends constructor {
+//             getModel = () => {
+//                 return Model;
+//             }
+//         };
+//     };
+// }
 
 function createModel(constructor: Function, name: string) {
     const fieldMetadatas = defaultMetadataStorage.findFieldMetadatasForClass(constructor);
@@ -27,6 +34,5 @@ function createModel(constructor: Function, name: string) {
         fieldData[fieldMetadata.propertyName] = fieldMetadata.type;
     });
     const schema = new mongoose.Schema(fieldData, { collection: name });
-    const Model = mongoose.model(name, schema);
-    return Model;
+    return mongoose.model(name, schema);
 }

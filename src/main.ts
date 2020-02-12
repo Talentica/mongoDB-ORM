@@ -1,4 +1,6 @@
 import * as mongoose from 'mongoose';
+import { defaultMetadataStorage } from './metadata/metadata.storage';
+import { Repository } from './repository';
 export * from './decorators/document/document.decorator';
 export * from './decorators/field/field.decorator';
 
@@ -10,4 +12,11 @@ export function createConnection(uris: string, options?: mongoose.ConnectionOpti
     db.once('open', () => {
         console.log('Connected to database!');
     });
+}
+
+export function getRepository<Entity>(entityClass: Function): Repository<Entity> {
+    const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(entityClass);
+    if (collectionMetadata && collectionMetadata.model) {
+        return new Repository(collectionMetadata.model);
+    }
 }
