@@ -5,8 +5,9 @@ import { FieldMetadata } from './field.metadata';
  * Stores all metadatas of all available types: collections, fields, relations, etc.
  */
 export class MetadataStorage {
-
-    private collectionMetadataMap: { [target: string]: CollectionMetadata };
+    private collectionMetadataMap: {
+        [target: string]: CollectionMetadata;
+    } = {};
     private fieldMetadatas: FieldMetadata[] = [];
 
     addCollectionMetadata(metadata: CollectionMetadata) {
@@ -22,7 +23,9 @@ export class MetadataStorage {
     }
 
     findFieldMetadatasForClass(target: Function): FieldMetadata[] {
-        return this.fieldMetadatas.filter(metadata => metadata.target === target);
+        return this.fieldMetadatas.filter(
+            (metadata) => metadata.target === target,
+        );
     }
 }
 
