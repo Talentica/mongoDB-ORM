@@ -9,8 +9,16 @@ import * as mongoose from 'mongoose';
  */
 export function document(options: DocumentOptions) {
     return (target: Function) => {
-        const model = createModel(target, options.name);
-        const metaData = new CollectionMetadata(target, options.name, model);
+        const MongooseModel = createModel(target, options.name);
+
+        const repo = Object.assign({}, MongooseModel, {
+            save: (x) => {
+                console.log('In Save');
+                MongooseModel.insertMany(x);
+            },
+        });
+
+        const metaData = new CollectionMetadata(target, options.name, MongooseModel, repo);
         defaultMetadataStorage.addCollectionMetadata(metaData);
     };
 }

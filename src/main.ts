@@ -17,6 +17,7 @@ export function createConnection(uris: string, options?: mongoose.ConnectionOpti
 export function getRepository<Entity>(entityClass: Function): Repository<Entity> {
     const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(entityClass);
     if (collectionMetadata && collectionMetadata.model) {
-        return new Repository(collectionMetadata.model);
+        return collectionMetadata.repo;
+        // return new Repository(collectionMetadata.model);
     }
 }
