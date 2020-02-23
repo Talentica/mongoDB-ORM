@@ -1,4 +1,5 @@
-import { document, field } from 'orm';
+import { document, field, OneToOne } from 'orm';
+import { Student } from './student.model';
 
 @document({ name: 'teacher' })
 export class Teacher {
@@ -8,4 +9,7 @@ export class Teacher {
 
     @field({ type: 'String', required: true })
     name: string;
+
+    @OneToOne({ targetCollection: 'Hello', cascade: true, eager: true, embedded: true, type: 'OneToOne' })
+    test: Student;
 }

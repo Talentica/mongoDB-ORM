@@ -6,6 +6,7 @@ import studentRoutes from './routes/student.routes';
 import { Teacher } from './models/teacher.model';
 
 createConnection('mongodb+srv://satyendra-singh-talentica:@nonym0us@cluster0-3lp3s.mongodb.net/test?retryWrites=true&w=majority');
+createConnection('mongodb+srv://koushik:koushik@cluster0-br4jq.mongodb.net/test?retryWrites=true&w=majority');
 
 // const app = express();
 // const port = 3000;
