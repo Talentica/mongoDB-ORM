@@ -1,9 +1,7 @@
-import * as mongoose from 'mongoose';
-
 export class RelationMetadata {
 
     target: Function;
-    fieldName: string;
+    propertyName: string;
     targetCollection: any;
     embedded: boolean;
     eager: boolean;
@@ -12,7 +10,7 @@ export class RelationMetadata {
 
     constructor(
         target: Function,
-        fieldName: string,
+        propertyName: string,
         targetCollection: any,
         embedded: boolean,
         eager: boolean,
@@ -20,7 +18,7 @@ export class RelationMetadata {
         type: string,
     ) {
         this.target = target;
-        this.fieldName = fieldName;
+        this.propertyName = propertyName;
         this.targetCollection = targetCollection;
         this.embedded = embedded;
         this.eager = eager;

@@ -10,6 +10,6 @@ export class Teacher {
     @field({ type: 'String', required: true })
     name: string;
 
-    @OneToOne({ targetCollection: 'Hello', cascade: true, eager: true, embedded: true, type: 'OneToOne' })
-    test: Student;
+    @OneToOne({ targetCollection: 'student', cascade: true, eager: true, embedded: true, type: 'OneToOne' })
+    student: Student;
 }
