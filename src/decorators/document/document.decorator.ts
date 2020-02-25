@@ -17,9 +17,21 @@ export function document(options: DocumentOptions) {
                 /**
                  * hanlde onetoone save
                  * use metadata
+                 * First: save the student
+                 * Second: save the teacher
                  */
+
+                const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
+                    target,
+                );
+                console.log(relationMetadatas);
+
+                // const student = getRepository(Student);
+                // student.save([s]);
+
+                console.log(x);
                 console.log('In Save, here: handle oneToOne save');
-                MongooseModel.insertMany(x);
+                // MongooseModel.insertMany(x);
             },
         });
 

@@ -25,15 +25,15 @@ createConnection('mongodb://localhost:27017/orm-test');
 // });
 
 const s = new Student();
-s.id = 4;
-s.name = 'student 4';
+s.id = 5;
+s.name = 'student 5';
 
-const student = getRepository(Student);
-student.save([s]);
+// const student = getRepository(Student);
+// student.save([s]);
 
 const t = new Teacher();
-t.id = 4;
-t.name = 'teacher 4';
+t.id = 5;
+t.name = 'teacher 5';
 t.student = s;
 
 const teacher = getRepository(Teacher);
