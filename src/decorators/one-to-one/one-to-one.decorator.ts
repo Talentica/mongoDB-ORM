@@ -9,9 +9,9 @@ export function OneToOne(options: OneToOneOptions) {
             propertyName,
             options.targetCollection,
             options.relatedClass,
-            options.embedded,
-            options.eager,
-            options.cascade,
+            options.embedded || false,
+            options.eager || false,
+            options.cascade || false,
             options.type,
         );
 

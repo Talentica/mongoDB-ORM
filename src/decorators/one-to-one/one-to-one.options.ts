@@ -5,5 +5,5 @@ export interface OneToOneOptions {
     embedded?: boolean;
     eager?: boolean;
     cascade?: boolean;
-    type?: string;
+    type: string;
 }

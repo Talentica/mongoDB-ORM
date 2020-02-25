@@ -27,7 +27,7 @@ export function document(options: DocumentOptions) {
                         const [resultObj] = result;
                         obj[relationMetadata.propertyName] = resultObj;
                         MongooseModel.insertMany([obj]);
-                        // TODO use promise all?
+                        // TODO promise all ?
                     });
                 });
                 // MongooseModel.insertMany([obj]); // TODO
