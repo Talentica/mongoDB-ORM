@@ -14,27 +14,39 @@ export function document(options: DocumentOptions) {
 
         const repo = Object.assign({}, MongooseModel, {
             save: (x) => {
+                /**
+                 * hanlde onetoone save
+                 * use metadata
+                 */
                 console.log('In Save, here: handle oneToOne save');
                 MongooseModel.insertMany(x);
             },
         });
 
-        const metaData = new CollectionMetadata(target, options.name, MongooseModel, repo);
+        const metaData = new CollectionMetadata(
+            target,
+            options.name,
+            MongooseModel,
+            repo,
+        );
         defaultMetadataStorage.addCollectionMetadata(metaData);
     };
 }
 
 function createModel(constructor: Function, name: string) {
-
-    const fieldMetadatas = defaultMetadataStorage.findFieldMetadatasForClass(constructor);
-    console.log(fieldMetadatas);
+    const fieldMetadatas = defaultMetadataStorage.findFieldMetadatasForClass(
+        constructor,
+    );
+    // console.log(fieldMetadatas);
     const fieldData = {};
     fieldMetadatas.forEach((fieldMetadata: FieldMetadata) => {
         fieldData[fieldMetadata.propertyName] = fieldMetadata.type;
     });
 
-    const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(constructor);
-    console.log(relationMetadatas);
+    const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
+        constructor,
+    );
+    // console.log(relationMetadatas);
     relationMetadatas.forEach((relationMetadata: RelationMetadata) => {
         fieldData[relationMetadata.propertyName] = {
             type: mongoose.Schema.Types.ObjectId,
