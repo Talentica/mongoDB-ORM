@@ -1,6 +1,6 @@
 import { createConnection, getRepository } from 'orm';
-import { Teacher } from './models/teacher.model';
-import { Student } from './models/student.model';
+// import { Teacher } from './models/teacher.model';
+// import { Student } from './models/student.model';
 import { User } from './models/user.model';
 import { Profile } from './models/profile.model';
 
