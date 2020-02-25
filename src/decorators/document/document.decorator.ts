@@ -33,6 +33,14 @@ export function document(options: DocumentOptions) {
                 console.log('In Save, here: handle oneToOne save');
                 // MongooseModel.insertMany(x);
             },
+
+            find: () => {
+                // koushik
+            },
+
+            delete: () => {
+                // jeetu
+            },
         });
 
         const metaData = new CollectionMetadata(
