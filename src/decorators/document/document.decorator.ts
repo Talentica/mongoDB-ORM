@@ -13,25 +13,27 @@ export function document(options: DocumentOptions) {
         const MongooseModel = createModel(target, options.name);
 
         const repo = Object.assign({}, MongooseModel, {
-            save: (x) => {
-                /**
-                 * hanlde onetoone save
-                 * use metadata
-                 * First: save the student
-                 * Second: save the teacher
-                 */
-
+            insertOne: (obj: any) => {
                 const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
                     target,
                 );
-                console.log(relationMetadatas);
+                relationMetadatas.forEach((relationMetadata: RelationMetadata) => {
+                    const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
+                        relationMetadata.relatedClass,
+                    );
+                    const relatedCollectionRepo = collectionMetadata.repo;
+                    const t = obj[relationMetadata.propertyName];
+                    relatedCollectionRepo.insertMany([t]).then(result => {
+                        const [resultObj] = result;
+                        obj[relationMetadata.propertyName] = resultObj;
+                        MongooseModel.insertMany([obj]);
+                    });
+                });
+                // MongooseModel.insertMany([obj]); // TODO
+            },
 
-                // const student = getRepository(Student);
-                // student.save([s]);
-
-                console.log(x);
-                console.log('In Save, here: handle oneToOne save');
-                // MongooseModel.insertMany(x);
+            insertMany: (data: any[]) => {
+                return MongooseModel.insertMany(data);
             },
 
             find: () => {
@@ -57,7 +59,6 @@ function createModel(constructor: Function, name: string) {
     const fieldMetadatas = defaultMetadataStorage.findFieldMetadatasForClass(
         constructor,
     );
-    // console.log(fieldMetadatas);
     const fieldData = {};
     fieldMetadatas.forEach((fieldMetadata: FieldMetadata) => {
         fieldData[fieldMetadata.propertyName] = fieldMetadata.type;
@@ -66,12 +67,12 @@ function createModel(constructor: Function, name: string) {
     const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
         constructor,
     );
-    // console.log(relationMetadatas);
     relationMetadatas.forEach((relationMetadata: RelationMetadata) => {
-        fieldData[relationMetadata.propertyName] = {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: relationMetadata.targetCollection,
-        };
+        fieldData[relationMetadata.propertyName] = relationMetadata.type;
+        // {
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     ref: relationMetadata.targetCollection,
+        // };
     });
 
     const schema = new mongoose.Schema(fieldData, { collection: name });

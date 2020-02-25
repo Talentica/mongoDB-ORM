@@ -10,6 +10,13 @@ export class Teacher {
     @field({ type: 'String', required: true })
     name: string;
 
-    @OneToOne({ targetCollection: 'student', cascade: true, eager: true, embedded: true, type: 'OneToOne' })
+    @OneToOne({
+        targetCollection: 'student',
+        relatedClass: Student,
+        cascade: true,
+        eager: true,
+        embedded: true,
+        type: 'Object',
+    })
     student: Student;
 }

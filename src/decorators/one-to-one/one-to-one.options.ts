@@ -1,6 +1,7 @@
 export interface OneToOneOptions {
     fieldName?: string;
-    targetCollection: any;
+    targetCollection: string;
+    relatedClass: Function;
     embedded?: boolean;
     eager?: boolean;
     cascade?: boolean;

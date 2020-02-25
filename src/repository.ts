@@ -6,6 +6,14 @@ export class Repository<Entity> {
         this.mongooseModel = mongooseModel;
     }
 
+    insertOne(entity: Entity): Entity {
+        return entity;
+    }
+
+    insertMany(entities: Entity[]): Entity[] {
+        return entities;
+    }
+
     find(): Entity[] {
         // do find
         return [];

@@ -8,6 +8,7 @@ export function OneToOne(options: OneToOneOptions) {
             object.constructor,
             propertyName,
             options.targetCollection,
+            options.relatedClass,
             options.embedded,
             options.eager,
             options.cascade,
