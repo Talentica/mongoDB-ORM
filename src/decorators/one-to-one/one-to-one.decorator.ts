@@ -2,7 +2,7 @@ import { OneToOneOptions } from './one-to-one.options';
 import { RelationMetadata } from '../../metadata/relation.metadata';
 import { defaultMetadataStorage } from '../../metadata/metadata.storage';
 
-export function OneToOne(options: OneToOneOptions) {
+export function oneToOne(options: OneToOneOptions) {
     return (object: Object, propertyName: string) => {
         const metadata = new RelationMetadata(
             object.constructor,

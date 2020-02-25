@@ -1,3 +1,5 @@
+import { OneToOneType } from './one-to-one.types';
+
 export interface OneToOneOptions {
     fieldName?: string;
     targetCollection: string;
@@ -5,5 +7,5 @@ export interface OneToOneOptions {
     embedded?: boolean;
     eager?: boolean;
     cascade?: boolean;
-    type: string;
+    type: OneToOneType;
 }
