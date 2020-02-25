@@ -3,36 +3,77 @@ import { CollectionMetadata } from '../../metadata/collection.metadata';
 import { defaultMetadataStorage } from '../../metadata/metadata.storage';
 import { FieldMetadata } from 'src/metadata/field.metadata';
 import * as mongoose from 'mongoose';
+import { RelationMetadata } from 'src/metadata/relation.metadata';
 
 /**
  * This decorator is used to mark classes that they gonna be Collections.
  */
 export function document(options: DocumentOptions) {
     return (target: Function) => {
-        const model = createModel(target, options.name);
-        const metaData = new CollectionMetadata(target, options.name, model);
+        const MongooseModel = createModel(target, options.name);
+
+        const repo = Object.assign({}, MongooseModel, {
+            save: (x) => {
+                /**
+                 * hanlde onetoone save
+                 * use metadata
+                 * First: save the student
+                 * Second: save the teacher
+                 */
+
+                const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
+                    target,
+                );
+                console.log(relationMetadatas);
+
+                // const student = getRepository(Student);
+                // student.save([s]);
+
+                console.log(x);
+                console.log('In Save, here: handle oneToOne save');
+                // MongooseModel.insertMany(x);
+            },
+
+            find: () => {
+                // koushik
+            },
+
+            delete: () => {
+                // jeetu
+            },
+        });
+
+        const metaData = new CollectionMetadata(
+            target,
+            options.name,
+            MongooseModel,
+            repo,
+        );
         defaultMetadataStorage.addCollectionMetadata(metaData);
     };
 }
-// export function document(options: DocumentOptions) {
-//     return function _document<T extends { new(...args: any[]) }>(constructor: T) {
-//         const Model = createModel(constructor, options.name);
-//         const metaData = new CollectionMetadata(constructor, options.name, Model);
-//         defaultMetadataStorage.addCollectionMetadata(metaData);
-//         return class extends constructor {
-//             getModel = () => {
-//                 return Model;
-//             }
-//         };
-//     };
-// }
 
 function createModel(constructor: Function, name: string) {
-    const fieldMetadatas = defaultMetadataStorage.findFieldMetadatasForClass(constructor);
+    const fieldMetadatas = defaultMetadataStorage.findFieldMetadatasForClass(
+        constructor,
+    );
+    // console.log(fieldMetadatas);
     const fieldData = {};
     fieldMetadatas.forEach((fieldMetadata: FieldMetadata) => {
         fieldData[fieldMetadata.propertyName] = fieldMetadata.type;
     });
+
+    const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
+        constructor,
+    );
+    // console.log(relationMetadatas);
+    relationMetadatas.forEach((relationMetadata: RelationMetadata) => {
+        fieldData[relationMetadata.propertyName] = {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: relationMetadata.targetCollection,
+        };
+    });
+
     const schema = new mongoose.Schema(fieldData, { collection: name });
     return mongoose.model(name, schema);
 }
