@@ -14,9 +14,9 @@ export class Repository<Entity> {
         return entities;
     }
 
-    find(): Entity[] {
+    findTest(entity?: Partial<Entity>): any {
         // do find
-        return [];
+        return;
     }
 
     save(entity: Entity): Entity {

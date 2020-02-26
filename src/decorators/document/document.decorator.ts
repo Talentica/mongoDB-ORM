@@ -37,15 +37,31 @@ export function document(options: DocumentOptions) {
                 return MongooseModel.insertMany(data);
             },
 
-            findTest: () => {
+            findTest: (obj?: any) => {
                 // koushik
                 const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
                     target,
                 );
-                const fieldMetadata = defaultMetadataStorage.findFieldMetadatasForClass(
-                    target,
-                );
-                console.log(relationMetadatas);
+                relationMetadatas.forEach(async (relationMetadata: RelationMetadata) => {
+                    if (relationMetadata.embedded === true) {
+                        return MongooseModel.find(obj);
+                    }
+                    if (relationMetadata.eager === true && relationMetadata.embedded === false) {
+                        // TODO get data from other collection and display with the current collection
+                        const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
+                            relationMetadata.relatedClass,
+                        );
+                        const relatedCollectionRepo = collectionMetadata.repo;
+                        const collectionData = await MongooseModel.find(obj);
+                        collectionData.map(async (item) => {
+                            const relatedCollectionData = await relatedCollectionRepo.findById(collectionData[relationMetadata.targetCollection]._id);
+
+                            collectionData[relationMetadata.targetCollection] = relatedCollectionData;
+                        });
+                        return collectionData;
+                    }
+                });
+
             },
 
             delete: () => {
