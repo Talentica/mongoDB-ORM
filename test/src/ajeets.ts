@@ -25,7 +25,6 @@ user.profile = profile;
 
 const userRepo = getRepository<User>(User);
 userRepo.insertOne(user);
-console.log(userRepo.find);
 
 // const s = new Student();
 // s.age = 20;

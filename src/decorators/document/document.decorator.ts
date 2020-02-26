@@ -12,6 +12,7 @@ export function document(options: DocumentOptions) {
     return (target: Function) => {
         const MongooseModel = createModel(target, options.name);
         const repo = Object.create(MongooseModel);
+
         repo.insertOne = (obj: any) => {
             const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
                 target,
@@ -21,14 +22,17 @@ export function document(options: DocumentOptions) {
                     relationMetadata.relatedClass,
                 );
                 const relatedCollectionRepo = collectionMetadata.repo;
-                const t = obj[relationMetadata.propertyName];
-                relatedCollectionRepo.insertMany([t]).then(result => {
-                    const [resultObj] = result;
-                    obj[relationMetadata.propertyName] = resultObj;
-                    MongooseModel.insertMany([obj]);
-                    // TODO promise all ?
-                });
+                const propertyName = relationMetadata.propertyName;
+
+                relatedCollectionRepo
+                    .insertMany([obj[propertyName]])
+                    .then((result) => {
+                        const [resultObj] = result;
+                        obj[propertyName] = resultObj;
+                    });
             });
+            console.log(obj);
+            // use async await
             // MongooseModel.insertMany([obj]); // TODO
         };
 
@@ -41,26 +45,36 @@ export function document(options: DocumentOptions) {
             const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
                 target,
             );
-            relationMetadatas.forEach(async (relationMetadata: RelationMetadata) => {
-                if (relationMetadata.embedded === true) {
-                    return MongooseModel.find(obj);
-                }
-                if (relationMetadata.eager === true && relationMetadata.embedded === false) {
-                    // TODO get data from other collection and display with the current collection
-                    const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
-                        relationMetadata.relatedClass,
-                    );
-                    const relatedCollectionRepo = collectionMetadata.repo;
-                    const collectionData = await MongooseModel.find(obj);
-                    collectionData.map(async (item) => {
-                        const relatedCollectionData = await relatedCollectionRepo.findById(collectionData[relationMetadata.targetCollection]._id);
+            relationMetadatas.forEach(
+                async (relationMetadata: RelationMetadata) => {
+                    if (relationMetadata.embedded === true) {
+                        return MongooseModel.find(obj);
+                    }
+                    if (
+                        relationMetadata.eager === true &&
+                        relationMetadata.embedded === false
+                    ) {
+                        // TODO get data from other collection and display with the current collection
+                        const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
+                            relationMetadata.relatedClass,
+                        );
+                        const relatedCollectionRepo = collectionMetadata.repo;
+                        const collectionData = await MongooseModel.find(obj);
+                        collectionData.map(async (item) => {
+                            const relatedCollectionData = await relatedCollectionRepo.findById(
+                                collectionData[
+                                    relationMetadata.targetCollection
+                                ]._id,
+                            );
 
-                        collectionData[relationMetadata.targetCollection] = relatedCollectionData;
-                    });
-                    return collectionData;
-                }
-            });
-
+                            collectionData[
+                                relationMetadata.targetCollection
+                            ] = relatedCollectionData;
+                        });
+                        return collectionData;
+                    }
+                },
+            );
         };
 
         repo.delete = () => {
