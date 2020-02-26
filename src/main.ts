@@ -20,7 +20,7 @@ export function createConnection(
 
 export function getRepository<Entity>(
     entityClass: Function,
-): Repository<Entity> {
+): Repository<Entity> & mongoose.Model<mongoose.Document, {}> {
     const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
         entityClass,
     );

@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
+        "ajeets": "ts-node -r tsconfig-paths/register src/ajeets.ts",
         "start": "ts-node -r tsconfig-paths/register src/koushik.ts",
         "lint": "tslint -p tsconfig.json -c tslint.json",
         "start:dev": "nodemon"

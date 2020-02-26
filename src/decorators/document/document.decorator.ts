@@ -11,63 +11,61 @@ import { RelationMetadata } from 'src/metadata/relation.metadata';
 export function document(options: DocumentOptions) {
     return (target: Function) => {
         const MongooseModel = createModel(target, options.name);
-
-        const repo = Object.assign({}, MongooseModel, {
-            insertOne: (obj: any) => {
-                const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
-                    target,
+        const repo = Object.create(MongooseModel);
+        repo.insertOne = (obj: any) => {
+            const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
+                target,
+            );
+            relationMetadatas.forEach((relationMetadata: RelationMetadata) => {
+                const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
+                    relationMetadata.relatedClass,
                 );
-                relationMetadatas.forEach((relationMetadata: RelationMetadata) => {
+                const relatedCollectionRepo = collectionMetadata.repo;
+                const t = obj[relationMetadata.propertyName];
+                relatedCollectionRepo.insertMany([t]).then(result => {
+                    const [resultObj] = result;
+                    obj[relationMetadata.propertyName] = resultObj;
+                    MongooseModel.insertMany([obj]);
+                    // TODO promise all ?
+                });
+            });
+            // MongooseModel.insertMany([obj]); // TODO
+        };
+
+        repo.insertMany = (data: any[]) => {
+            return MongooseModel.insertMany(data);
+        };
+
+        repo.findTest = (obj?: any) => {
+            // koushik
+            const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
+                target,
+            );
+            relationMetadatas.forEach(async (relationMetadata: RelationMetadata) => {
+                if (relationMetadata.embedded === true) {
+                    return MongooseModel.find(obj);
+                }
+                if (relationMetadata.eager === true && relationMetadata.embedded === false) {
+                    // TODO get data from other collection and display with the current collection
                     const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
                         relationMetadata.relatedClass,
                     );
                     const relatedCollectionRepo = collectionMetadata.repo;
-                    const t = obj[relationMetadata.propertyName];
-                    relatedCollectionRepo.insertMany([t]).then(result => {
-                        const [resultObj] = result;
-                        obj[relationMetadata.propertyName] = resultObj;
-                        MongooseModel.insertMany([obj]);
-                        // TODO promise all ?
+                    const collectionData = await MongooseModel.find(obj);
+                    collectionData.map(async (item) => {
+                        const relatedCollectionData = await relatedCollectionRepo.findById(collectionData[relationMetadata.targetCollection]._id);
+
+                        collectionData[relationMetadata.targetCollection] = relatedCollectionData;
                     });
-                });
-                // MongooseModel.insertMany([obj]); // TODO
-            },
+                    return collectionData;
+                }
+            });
 
-            insertMany: (data: any[]) => {
-                return MongooseModel.insertMany(data);
-            },
+        };
 
-            findTest: (obj?: any) => {
-                // koushik
-                const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
-                    target,
-                );
-                relationMetadatas.forEach(async (relationMetadata: RelationMetadata) => {
-                    if (relationMetadata.embedded === true) {
-                        return MongooseModel.find(obj);
-                    }
-                    if (relationMetadata.eager === true && relationMetadata.embedded === false) {
-                        // TODO get data from other collection and display with the current collection
-                        const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
-                            relationMetadata.relatedClass,
-                        );
-                        const relatedCollectionRepo = collectionMetadata.repo;
-                        const collectionData = await MongooseModel.find(obj);
-                        collectionData.map(async (item) => {
-                            const relatedCollectionData = await relatedCollectionRepo.findById(collectionData[relationMetadata.targetCollection]._id);
-
-                            collectionData[relationMetadata.targetCollection] = relatedCollectionData;
-                        });
-                        return collectionData;
-                    }
-                });
-
-            },
-
-            delete: () => {
-                // jeetu
-            },
-        });
+        repo.delete = () => {
+            // jeetu
+        };
 
         const metaData = new CollectionMetadata(
             target,
