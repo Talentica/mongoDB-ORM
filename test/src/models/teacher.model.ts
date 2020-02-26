@@ -1,15 +1,22 @@
-import { document, field, OneToOne } from 'orm';
+import { document, field, oneToOne } from 'orm';
 import { Student } from './student.model';
 
 @document({ name: 'teacher' })
 export class Teacher {
 
-    @field({ type: 'Number', required: true })
-    id: number;
-
     @field({ type: 'String', required: true })
     name: string;
 
-    @OneToOne({ targetCollection: 'student', cascade: true, eager: true, embedded: true, type: 'OneToOne' })
+    @field({ type: 'Number', required: true })
+    age: number;
+
+    @oneToOne({
+        targetCollection: 'student',
+        relatedClass: Student,
+        cascade: true,
+        eager: true,
+        embedded: true,
+        type: 'Object',
+    })
     student: Student;
 }
