@@ -34,8 +34,15 @@ export function document(options: DocumentOptions) {
                 // MongooseModel.insertMany(x);
             },
 
-            find: () => {
+            findTest: () => {
                 // koushik
+                const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
+                    target,
+                );
+                const fieldMetadata = defaultMetadataStorage.findFieldMetadatasForClass(
+                    target,
+                );
+                console.log(relationMetadatas);
             },
 
             delete: () => {
