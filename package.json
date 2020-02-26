@@ -4,8 +4,9 @@
     "description": "",
     "main": "dist/main.js",
     "scripts": {
-        "build": "rimraf dist && tsc -p tsconfig.build.json",
+        "build": "rimraf dist && tsc -p tsconfig.build.json && cd test && npm link orm",
         "start": "ts-node -r tsconfig-paths/register src/main.ts",
+        "start:test": "cd test && npm run start",
         "start:dev": "nodemon",
         "start:prod": "node dist/main.js",
         "lint": "tslint -p tsconfig.json -c tslint.json",
