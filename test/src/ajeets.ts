@@ -1,8 +1,7 @@
 import { createConnection, getRepository } from 'orm';
-// import { Teacher } from './models/teacher.model';
-// import { Student } from './models/student.model';
 import { User } from './models/user.model';
 import { Profile } from './models/profile.model';
+import { Banking } from './models/bank_details.model';
 
 function getDbUrl() {
     let dbUrl = '';
@@ -15,31 +14,18 @@ function getDbUrl() {
 createConnection(getDbUrl());
 
 const profile = new Profile();
-profile.age = 30;
-profile.home = 'New York';
+profile.age = 33;
+profile.home = 'Brooklyn';
+
+const banking = new Banking();
+banking.account = '1122334455';
+banking.branch = 'NY';
 
 const user = new User();
-user.name = 'Penny';
-user.email = 'penny@example.com';
+user.name = 'Peter';
+user.email = 'peter@example.com';
 user.profile = profile;
+user.banking = banking;
 
 const userRepo = getRepository<User>(User);
 userRepo.insertOne(user);
-
-// const s = new Student();
-// s.age = 20;
-// s.name = 'Rio';
-
-// const t = new Teacher();
-// t.age = 30;
-// t.name = 'Helsinki';
-// t.student = s;
-
-// const teacher = getRepository<Teacher>(Teacher);
-// teacher.insertOne(t);
-
-/**
- * The Object.assign() method copies all enumerable own properties
- * from one or more source objects to a target object.
- * It returns the target object.
- */

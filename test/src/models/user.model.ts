@@ -1,9 +1,9 @@
 import { document, field, oneToOne } from 'orm';
 import { Profile } from './profile.model';
+import { Banking } from './bank_details.model';
 
 @document({ name: 'user' })
 export class User {
-
     @field({ type: 'String', required: true })
     name: string;
 
@@ -15,8 +15,18 @@ export class User {
         relatedClass: Profile,
         cascade: true,
         eager: true,
-        embedded: false,
+        embedded: true,
         type: 'Object',
     })
     profile: Profile;
+
+    @oneToOne({
+        targetCollection: 'banking',
+        relatedClass: Banking,
+        cascade: true,
+        eager: true,
+        embedded: true,
+        type: 'Object',
+    })
+    banking: Banking;
 }

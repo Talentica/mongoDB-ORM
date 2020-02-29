@@ -17,26 +17,36 @@ export function document(options: DocumentOptions) {
             const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
                 target,
             );
-            relationMetadatas.forEach((relationMetadata: RelationMetadata) => {
-                const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
-                    relationMetadata.relatedClass,
-                );
-                const relatedCollectionRepo = collectionMetadata.repo;
-                const propertyName = relationMetadata.propertyName;
+            const promises: {
+                [propertyName: string]: Promise<mongoose.Document[]>;
+            } = {};
 
-                relatedCollectionRepo
-                    .insertMany([obj[propertyName]])
-                    .then((result) => {
-                        const [resultObj] = result;
-                        obj[propertyName] = resultObj;
-                    });
+            relationMetadatas.forEach(
+                async (relationMetadata: RelationMetadata) => {
+                    const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
+                        relationMetadata.relatedClass,
+                    );
+                    const relatedCollectionRepo = collectionMetadata.repo;
+                    const propertyName = relationMetadata.propertyName;
+
+                    promises[propertyName] = relatedCollectionRepo.insertMany([
+                        obj[propertyName],
+                    ]);
+                },
+            );
+
+            const size = Object.keys(promises).length;
+            Object.keys(promises).forEach(async (propertyName, index) => {
+                const [result] = await promises[propertyName];
+                obj[propertyName] = result;
+                if (index === size - 1) {
+                    MongooseModel.insertMany([obj]);
+                    // TODO return promise of above
+                }
             });
-            console.log(obj);
-            // use async await
-            // MongooseModel.insertMany([obj]); // TODO
         };
 
-        repo.insertMany = (data: any[]) => {
+        repo.insertMany = (data: any[]): Promise<mongoose.Document[]> => {
             return MongooseModel.insertMany(data);
         };
 
