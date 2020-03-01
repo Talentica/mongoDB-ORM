@@ -35,15 +35,23 @@ export function document(options: DocumentOptions) {
                 },
             );
 
+            console.log('before');
+            let lastPromise: Promise<mongoose.Document[]>;
+            let foo = 1;
+
             const size = Object.keys(promises).length;
             Object.keys(promises).forEach(async (propertyName, index) => {
                 const [result] = await promises[propertyName];
+                console.log('result of ', propertyName, result);
                 obj[propertyName] = result;
                 if (index === size - 1) {
-                    MongooseModel.insertMany([obj]);
-                    // TODO return promise of above
+                    lastPromise = MongooseModel.insertMany([obj]);
+                    foo = 2;
                 }
             });
+            console.log('after');
+            console.log('return from here');
+            return { lastPromise, foo };
         };
 
         repo.insertMany = (data: any[]): Promise<mongoose.Document[]> => {

@@ -28,4 +28,5 @@ user.profile = profile;
 user.banking = banking;
 
 const userRepo = getRepository<User>(User);
-userRepo.insertOne(user);
+const { lastPromise, foo } = userRepo.insertOne(user) as any;
+console.log(lastPromise, foo);
