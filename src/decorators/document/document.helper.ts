@@ -25,7 +25,7 @@ export function insertRelatedProps(data: any, target: Function) {
 }
 
 export function prepareData(data: any, promises: Promises): Promise<any> {
-    const dataCopy = JSON.parse(JSON.stringify(data));
+    const dataCopy = Object.assign({}, data);
     const size = Object.keys(promises).length;
 
     return new Promise((resolve) => {

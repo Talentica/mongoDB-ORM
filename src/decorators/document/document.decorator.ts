@@ -12,7 +12,7 @@ export function document(options: DocumentOptions) {
         const repo = Object.create(MongooseModel);
 
         repo.insertOne = async (data: any): Promise<mongoose.Document[]> => {
-            const dataCopy = JSON.parse(JSON.stringify(data));
+            const dataCopy = Object.assign({}, data);
             const promises = insertRelatedProps(dataCopy, target);
             const preparedData = await prepareData(dataCopy, promises);
             return MongooseModel.insertMany([preparedData]);
