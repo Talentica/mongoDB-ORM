@@ -19,6 +19,7 @@ export function document(options: DocumentOptions) {
         };
 
         repo.insertMany = (data: any[]): Promise<mongoose.Document[]> => {
+            // TODO
             return MongooseModel.insertMany(data);
         };
 
