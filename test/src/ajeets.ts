@@ -14,19 +14,22 @@ function getDbUrl() {
 createConnection(getDbUrl());
 
 const profile = new Profile();
-profile.age = 33;
-profile.home = 'Brooklyn';
+profile.age = 44;
+profile.home = 'Home 44';
 
 const banking = new Banking();
-banking.account = '1122334455';
-banking.branch = 'NY';
+banking.account = '4444444444';
+banking.branch = 'Branch 44';
 
 const user = new User();
-user.name = 'Peter';
-user.email = 'peter@example.com';
+user.name = 'Name 44';
+user.email = 'name44@example.com';
 user.profile = profile;
 user.banking = banking;
 
 const userRepo = getRepository<User>(User);
-const { lastPromise, foo } = userRepo.insertOne(user) as any;
-console.log(lastPromise, foo);
+(userRepo.insertOne(user) as any).then((r) => console.log(r));
+
+setTimeout(() => {
+    console.log('user at ajeets', user);
+}, 10000);

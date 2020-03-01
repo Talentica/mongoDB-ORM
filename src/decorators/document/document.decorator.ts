@@ -4,54 +4,18 @@ import { defaultMetadataStorage } from '../../metadata/metadata.storage';
 import { FieldMetadata } from 'src/metadata/field.metadata';
 import * as mongoose from 'mongoose';
 import { RelationMetadata } from 'src/metadata/relation.metadata';
+import { insertRelatedProps, prepareData } from './document.helper';
 
-/**
- * This decorator is used to mark classes that they gonna be Collections.
- */
 export function document(options: DocumentOptions) {
     return (target: Function) => {
         const MongooseModel = createModel(target, options.name);
         const repo = Object.create(MongooseModel);
 
-        repo.insertOne = (obj: any) => {
-            const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
-                target,
-            );
-            const promises: {
-                [propertyName: string]: Promise<mongoose.Document[]>;
-            } = {};
-
-            relationMetadatas.forEach(
-                async (relationMetadata: RelationMetadata) => {
-                    const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
-                        relationMetadata.relatedClass,
-                    );
-                    const relatedCollectionRepo = collectionMetadata.repo;
-                    const propertyName = relationMetadata.propertyName;
-
-                    promises[propertyName] = relatedCollectionRepo.insertMany([
-                        obj[propertyName],
-                    ]);
-                },
-            );
-
-            console.log('before');
-            let lastPromise: Promise<mongoose.Document[]>;
-            let foo = 1;
-
-            const size = Object.keys(promises).length;
-            Object.keys(promises).forEach(async (propertyName, index) => {
-                const [result] = await promises[propertyName];
-                console.log('result of ', propertyName, result);
-                obj[propertyName] = result;
-                if (index === size - 1) {
-                    lastPromise = MongooseModel.insertMany([obj]);
-                    foo = 2;
-                }
-            });
-            console.log('after');
-            console.log('return from here');
-            return { lastPromise, foo };
+        repo.insertOne = async (data: any): Promise<mongoose.Document[]> => {
+            const dataCopy = JSON.parse(JSON.stringify(data));
+            const promises = insertRelatedProps(dataCopy, target);
+            const preparedData = await prepareData(dataCopy, promises);
+            return MongooseModel.insertMany([preparedData]);
         };
 
         repo.insertMany = (data: any[]): Promise<mongoose.Document[]> => {

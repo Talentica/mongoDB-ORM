@@ -1,3 +1,4 @@
+import { Document } from 'mongoose';
 // export class Repository<Entity> {
 
 //     private mongooseModel;
@@ -26,8 +27,8 @@
 // }
 
 export interface Repository<Entity> {
-    insertOne: (entity: Entity) => Entity;
-    intertMany: (entities: Entity[]) => Entity[];
+    insertOne: (entity: Entity) => Promise<Document[]>;
+    intertMany: (entities: Entity[]) => Promise<Document[]>;
     findTest: (entity: Partial<Entity>) => any;
     save: (entity: Entity) => Entity;
 }
