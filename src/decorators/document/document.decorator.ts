@@ -4,23 +4,39 @@ import { defaultMetadataStorage } from '../../metadata/metadata.storage';
 import { FieldMetadata } from 'src/metadata/field.metadata';
 import * as mongoose from 'mongoose';
 import { RelationMetadata } from 'src/metadata/relation.metadata';
-import { insertRelatedProps, prepareData } from './document.helper';
+import {
+    insertRelatedProps,
+    prepareData,
+    Promises,
+    prepareDataArray,
+} from './document.helper';
 
 export function document(options: DocumentOptions) {
     return (target: Function) => {
         const MongooseModel = createModel(target, options.name);
         const repo = Object.create(MongooseModel);
 
-        repo.create = async (data: any): Promise<mongoose.Document> => {
+        repo.create = async (data: Object): Promise<mongoose.Document> => {
             const dataCopy = Object.assign({}, data);
             const promises = insertRelatedProps(dataCopy, target);
             const preparedData = await prepareData(dataCopy, promises);
             return MongooseModel.create(preparedData);
         };
 
-        repo.insertMany = (data: any[]): Promise<mongoose.Document[]> => {
-            // TODO
-            return MongooseModel.insertMany(data);
+        repo.insertMany = async (
+            data: Object[],
+        ): Promise<mongoose.Document[]> => {
+            const dataCopy = data.map((item) => Object.assign({}, item));
+            const promisesArray: Promises[] = []; // refactor
+            dataCopy.forEach((item) => {
+                const promises = insertRelatedProps(item, target);
+                promisesArray.push(promises);
+            });
+            const preparedData = await prepareDataArray(
+                dataCopy,
+                promisesArray,
+            );
+            return MongooseModel.insertMany(preparedData);
         };
 
         repo.findTest = (obj?: any) => {

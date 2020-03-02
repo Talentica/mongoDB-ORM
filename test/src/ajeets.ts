@@ -13,35 +13,55 @@ function getDbUrl() {
 
 createConnection(getDbUrl());
 
-const profile1 = new Profile();
-profile1.age = 1;
-profile1.home = 'Home 1';
-
-const banking1 = new Banking();
-banking1.account = '1';
-banking1.branch = 'Branch 1';
-
-const user1 = new User();
-user1.name = 'Name 1';
-user1.email = 'name1@example.com';
-user1.profile = profile1;
-user1.banking = banking1;
-
-const profile2 = new Profile();
-profile2.age = 2;
-profile2.home = 'Home 2';
-
-const banking2 = new Banking();
-banking2.account = '2';
-banking2.branch = 'Branch 2';
-
-const user2 = new User();
-user2.name = 'Name 2';
-user2.email = 'name2@example.com';
-user2.profile = profile2;
-user2.banking = banking2;
-
-const users = [user1, user2];
-
 const userRepo = getRepository<User>(User);
-userRepo.insertMany(users).then((r) => console.log(r, users));
+
+// user 1
+const p1 = new Profile();
+p1.age = 33;
+p1.home = 'Brooklyn';
+
+const b1 = new Banking();
+b1.account = '3300';
+b1.branch = 'Brooklyn Branch';
+
+const u1 = new User();
+u1.name = 'Captain America';
+u1.email = 'captain.america@example.com';
+u1.profile = p1;
+u1.banking = b1;
+
+// user 2
+const p2 = new Profile();
+p2.age = 35;
+p2.home = 'Manhattan';
+
+const b2 = new Banking();
+b2.account = '3500';
+b2.branch = 'Manhattan Branch';
+
+const u2 = new User();
+u2.name = 'Iron Man';
+u2.email = 'iron_man@example.com';
+u2.profile = p2;
+u2.banking = b2;
+
+userRepo
+    .insertMany([u1, u2])
+    .then((res) => console.log('ajeets: insertMany', res));
+
+// user 3
+const p3 = new Profile();
+p3.age = 40;
+p3.home = 'Melbourne';
+
+const b3 = new Banking();
+b3.account = '4000';
+b3.branch = 'Melbourne Branch';
+
+const u3 = new User();
+u3.name = 'Thor';
+u3.email = 'thor@example.com';
+u3.profile = p3;
+u3.banking = b3;
+
+userRepo.create(u3).then((res) => console.log('ajeets: create', res));
