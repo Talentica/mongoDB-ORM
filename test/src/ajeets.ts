@@ -14,18 +14,18 @@ function getDbUrl() {
 createConnection(getDbUrl());
 
 const profile = new Profile();
-profile.age = 55;
-profile.home = 'Home 55';
+profile.age = 11;
+profile.home = 'Home 11';
 
 const banking = new Banking();
-banking.account = '5555555';
-banking.branch = 'Branch 55';
+banking.account = '11111';
+banking.branch = 'Branch 11';
 
 const user = new User();
-user.name = 'Name 55';
-user.email = 'name55@example.com';
+user.name = 'Name 11';
+user.email = 'name11@example.com';
 user.profile = profile;
 user.banking = banking;
 
 const userRepo = getRepository<User>(User);
-userRepo.insertOne(user).then((r) => console.log(r, user));
+userRepo.create(user).then((r) => console.log(r, user));

@@ -11,11 +11,11 @@ export function document(options: DocumentOptions) {
         const MongooseModel = createModel(target, options.name);
         const repo = Object.create(MongooseModel);
 
-        repo.insertOne = async (data: any): Promise<mongoose.Document[]> => {
+        repo.create = async (data: any): Promise<mongoose.Document> => {
             const dataCopy = Object.assign({}, data);
             const promises = insertRelatedProps(dataCopy, target);
             const preparedData = await prepareData(dataCopy, promises);
-            return MongooseModel.insertMany([preparedData]);
+            return MongooseModel.create(preparedData);
         };
 
         repo.insertMany = (data: any[]): Promise<mongoose.Document[]> => {

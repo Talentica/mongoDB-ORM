@@ -27,7 +27,7 @@ import { Document } from 'mongoose';
 // }
 
 export interface Repository<Entity> {
-    insertOne: (entity: Entity) => Promise<Document[]>;
+    create: (entity: Entity) => Promise<Document>;
     intertMany: (entities: Entity[]) => Promise<Document[]>;
     findTest: (entity: Partial<Entity>) => any;
     save: (entity: Entity) => Entity;
