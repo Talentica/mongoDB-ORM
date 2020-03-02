@@ -13,19 +13,35 @@ function getDbUrl() {
 
 createConnection(getDbUrl());
 
-const profile = new Profile();
-profile.age = 11;
-profile.home = 'Home 11';
+const profile1 = new Profile();
+profile1.age = 1;
+profile1.home = 'Home 1';
 
-const banking = new Banking();
-banking.account = '11111';
-banking.branch = 'Branch 11';
+const banking1 = new Banking();
+banking1.account = '1';
+banking1.branch = 'Branch 1';
 
-const user = new User();
-user.name = 'Name 11';
-user.email = 'name11@example.com';
-user.profile = profile;
-user.banking = banking;
+const user1 = new User();
+user1.name = 'Name 1';
+user1.email = 'name1@example.com';
+user1.profile = profile1;
+user1.banking = banking1;
+
+const profile2 = new Profile();
+profile2.age = 2;
+profile2.home = 'Home 2';
+
+const banking2 = new Banking();
+banking2.account = '2';
+banking2.branch = 'Branch 2';
+
+const user2 = new User();
+user2.name = 'Name 2';
+user2.email = 'name2@example.com';
+user2.profile = profile2;
+user2.banking = banking2;
+
+const users = [user1, user2];
 
 const userRepo = getRepository<User>(User);
-userRepo.create(user).then((r) => console.log(r, user));
+userRepo.insertMany(users).then((r) => console.log(r, users));
