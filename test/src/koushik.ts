@@ -32,5 +32,5 @@ const userRepo = getRepository<User>(User);
  * {name:'koushik',email:'test@gmail.com',profile:{age:'21',home:'test'}} //embedded:true
  */
 
-const id = '5e5e89865029e1194599a935';
+const id = '5e5e89865029e1194599a935'; // TODO : pick an id from your db
 userRepo.findById2(id);
