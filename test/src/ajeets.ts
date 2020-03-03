@@ -1,8 +1,7 @@
 import { createConnection, getRepository } from 'orm';
-// import { Teacher } from './models/teacher.model';
-// import { Student } from './models/student.model';
 import { User } from './models/user.model';
 import { Profile } from './models/profile.model';
+import { Banking } from './models/bank_details.model';
 
 function getDbUrl() {
     let dbUrl = '';
@@ -14,32 +13,55 @@ function getDbUrl() {
 
 createConnection(getDbUrl());
 
-const profile = new Profile();
-profile.age = 30;
-profile.home = 'New York';
-
-const user = new User();
-user.name = 'Penny';
-user.email = 'penny@example.com';
-user.profile = profile;
-
 const userRepo = getRepository<User>(User);
-userRepo.insertOne(user);
 
-// const s = new Student();
-// s.age = 20;
-// s.name = 'Rio';
+// user 1
+const p1 = new Profile();
+p1.age = 33;
+p1.home = 'Brooklyn';
 
-// const t = new Teacher();
-// t.age = 30;
-// t.name = 'Helsinki';
-// t.student = s;
+const b1 = new Banking();
+b1.account = '3300';
+b1.branch = 'Brooklyn Branch';
 
-// const teacher = getRepository<Teacher>(Teacher);
-// teacher.insertOne(t);
+const u1 = new User();
+u1.name = 'Captain America';
+u1.email = 'captain.america@example.com';
+u1.profile = p1;
+u1.banking = b1;
 
-/**
- * The Object.assign() method copies all enumerable own properties
- * from one or more source objects to a target object.
- * It returns the target object.
- */
+// user 2
+const p2 = new Profile();
+p2.age = 35;
+p2.home = 'Manhattan';
+
+const b2 = new Banking();
+b2.account = '3500';
+b2.branch = 'Manhattan Branch';
+
+const u2 = new User();
+u2.name = 'Iron Man';
+u2.email = 'iron_man@example.com';
+u2.profile = p2;
+u2.banking = b2;
+
+userRepo
+    .insertMany([u1, u2])
+    .then((res) => console.log('ajeets: insertMany', res));
+
+// user 3
+const p3 = new Profile();
+p3.age = 40;
+p3.home = 'Melbourne';
+
+const b3 = new Banking();
+b3.account = '4000';
+b3.branch = 'Melbourne Branch';
+
+const u3 = new User();
+u3.name = 'Thor';
+u3.email = 'thor@example.com';
+u3.profile = p3;
+u3.banking = b3;
+
+userRepo.create(u3).then((res) => console.log('ajeets: create', res));
