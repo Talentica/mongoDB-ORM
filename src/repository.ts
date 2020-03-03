@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, DocumentQuery } from 'mongoose';
 // export class Repository<Entity> {
 
 //     private mongooseModel;
@@ -29,6 +29,8 @@ import { Document } from 'mongoose';
 export interface Repository<Entity> {
     create: (entity: Entity) => Promise<Document>;
     intertMany: (entities: Entity[]) => Promise<Document[]>;
+    find: (entity: Entity) => DocumentQuery<Document[], Document, {}>;
+    findById2: (id: string) => DocumentQuery<Document, Document, {}>;
     findTest: (entity: Partial<Entity>) => any;
     save: (entity: Entity) => Entity;
 }

@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
 
 export class CollectionMetadata {
-
     target: Function;
     name: string;
     model: mongoose.Model<any>;

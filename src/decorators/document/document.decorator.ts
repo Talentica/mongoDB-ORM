@@ -2,7 +2,7 @@ import { DocumentOptions } from './document.options';
 import { CollectionMetadata } from '../../metadata/collection.metadata';
 import { defaultMetadataStorage } from '../../metadata/metadata.storage';
 import { FieldMetadata } from '../../metadata/field.metadata';
-import * as mongoose from 'mongoose';
+import { Document, DocumentQuery, Schema, model } from 'mongoose';
 import { RelationMetadata } from '../../metadata/relation.metadata';
 import {
     insertRelatedProps,
@@ -16,16 +16,14 @@ export function document(options: DocumentOptions) {
         const MongooseModel = createModel(target, options.name);
         const repo = Object.create(MongooseModel);
 
-        repo.create = async (data: Object): Promise<mongoose.Document> => {
+        repo.create = async (data: Object): Promise<Document> => {
             const dataCopy = Object.assign({}, data);
             const promises = insertRelatedProps(dataCopy, target);
             const preparedData = await prepareData(dataCopy, promises);
             return MongooseModel.create(preparedData);
         };
 
-        repo.insertMany = async (
-            data: Object[],
-        ): Promise<mongoose.Document[]> => {
+        repo.insertMany = async (data: Object[]): Promise<Document[]> => {
             const dataCopy = data.map((item) => Object.assign({}, item));
             const promisesArray: Promises[] = []; // refactor
             dataCopy.forEach((item) => {
@@ -37,6 +35,35 @@ export function document(options: DocumentOptions) {
                 promisesArray,
             );
             return MongooseModel.insertMany(preparedData);
+        };
+
+        repo.find = (data?: Object) => {
+            return MongooseModel.find(data);
+        };
+
+        repo.findById2 = async (id: string) => {
+            const promise: any = MongooseModel.findById(id);
+            const user: any = await promise;
+            const profileId = user.profile._id.toString();
+
+            const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
+                target,
+            );
+            relationMetadatas.forEach(
+                async (relationMetadata: RelationMetadata) => {
+                    const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
+                        relationMetadata.relatedClass,
+                    );
+                    const relatedCollectionRepo = collectionMetadata.model;
+                    const property = relationMetadata.propertyName;
+                    if (property === 'profile') {
+                        const t = await relatedCollectionRepo.findById(
+                            profileId,
+                        );
+                        console.log(t);
+                    }
+                },
+            );
         };
 
         repo.findTest = (obj?: any) => {
@@ -104,12 +131,8 @@ function createModel(constructor: Function, name: string) {
     );
     relationMetadatas.forEach((relationMetadata: RelationMetadata) => {
         fieldData[relationMetadata.propertyName] = relationMetadata.type;
-        // {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: relationMetadata.targetCollection,
-        // };
     });
 
-    const schema = new mongoose.Schema(fieldData, { collection: name });
-    return mongoose.model(name, schema);
+    const schema = new Schema(fieldData, { collection: name });
+    return model(name, schema);
 }
