@@ -6,20 +6,21 @@ function getDbUrl() {
     let dbUrl = '';
     dbUrl = 'mongodb://localhost:27017/fancy-orm';
     // dbUrl = 'mongodb+srv://satyendra-singh-talentica:@nonym0us@cluster0-3lp3s.mongodb.net/test?retryWrites=true&w=majority';
-    dbUrl = 'mongodb+srv://koushik:koushik@cluster0-br4jq.mongodb.net/test?retryWrites=true&w=majority';
+    dbUrl =
+        'mongodb+srv://koushik:koushik@cluster0-br4jq.mongodb.net/test?retryWrites=true&w=majority';
     return dbUrl;
 }
 
 createConnection(getDbUrl());
 
-const profile = new Profile();
-profile.age = 30;
-profile.home = 'Denver';
+// const profile = new Profile();
+// profile.age = 30;
+// profile.home = 'Denver';
 
-const user = new User();
-user.name = 'Jaime';
-user.email = 'jaime@example.com';
-user.profile = profile;
+// const user = new User();
+// user.name = 'Jaime';
+// user.email = 'jaime@example.com';
+// user.profile = profile;
 
 const userRepo = getRepository<User>(User);
 
@@ -35,8 +36,8 @@ const data = userRepo.findTest({ name: 'Jaime3' });
 
 // const data1 = data.then((res) => { return res });
 
-console.log("Data ", data);
+console.log('userRepo -->> ', userRepo);
 
-setTimeout(() => console.log('Data --->>> ', data), 5000);
+setTimeout(() => console.log('Data --->>> ', data), 10000);
 
 // userRepo.insertOne

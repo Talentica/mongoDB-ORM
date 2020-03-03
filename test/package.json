@@ -4,7 +4,8 @@
     "description": "",
     "scripts": {
         "ajeets": "ts-node -r tsconfig-paths/register src/ajeets.ts",
-        "start": "ts-node -r tsconfig-paths/register src/koushik.ts",
+        "koushik": "ts-node -r tsconfig-paths/register src/koushik.ts",
+        "start": "ts-node -r tsconfig-paths/register src/app.ts",
         "lint": "tslint -p tsconfig.json -c tslint.json",
         "start:dev": "nodemon"
     },

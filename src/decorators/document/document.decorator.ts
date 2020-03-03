@@ -1,9 +1,9 @@
 import { DocumentOptions } from './document.options';
 import { CollectionMetadata } from '../../metadata/collection.metadata';
 import { defaultMetadataStorage } from '../../metadata/metadata.storage';
-import { FieldMetadata } from 'src/metadata/field.metadata';
+import { FieldMetadata } from '../../metadata/field.metadata';
 import * as mongoose from 'mongoose';
-import { RelationMetadata } from 'src/metadata/relation.metadata';
+import { RelationMetadata } from '../../metadata/relation.metadata';
 
 /**
  * This decorator is used to mark classes that they gonna be Collections.
@@ -45,31 +45,31 @@ export function document(options: DocumentOptions) {
             const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
                 target,
             );
-            relationMetadatas.forEach(
+            return relationMetadatas.forEach(
                 async (relationMetadata: RelationMetadata) => {
-                    if (relationMetadata.embedded === true) {
+                    if (relationMetadata.embedded) {
                         return MongooseModel.find(obj);
                     }
-                    if (
-                        relationMetadata.eager === true &&
-                        relationMetadata.embedded === false
-                    ) {
+                    if (relationMetadata.eager && !relationMetadata.embedded) {
                         // TODO get data from other collection and display with the current collection
                         const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
                             relationMetadata.relatedClass,
                         );
+
                         const relatedCollectionRepo = collectionMetadata.repo;
+
                         const collectionData = await MongooseModel.find(obj);
                         collectionData.map(async (item) => {
-                            const relatedCollectionData = await relatedCollectionRepo.findById(
-                                collectionData[
-                                    relationMetadata.targetCollection
-                                ]._id,
+                            console.log(
+                                'relatedCollectionData  --->>> ',
+                                await relatedCollectionRepo.find(),
                             );
-
-                            collectionData[
-                                relationMetadata.targetCollection
-                            ] = relatedCollectionData;
+                            // const relatedCollectionData: mongoose.Document[] = await relatedCollectionRepo.findById(
+                            //     item[relationMetadata.targetCollection]._id,
+                            // );
+                            // collectionData[
+                            //     relationMetadata.targetCollection
+                            // ] = relatedCollectionData;
                         });
                         return collectionData;
                     }
