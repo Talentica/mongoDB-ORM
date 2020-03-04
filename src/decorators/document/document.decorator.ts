@@ -103,8 +103,39 @@ export function document(options: DocumentOptions) {
             );
         };
 
-        repo.delete = () => {
-            // jeetu
+        repo.deleteOne = (obj: any) => {
+            const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
+                target,
+            );
+
+            relationMetadatas.forEach(
+                async (relationMetadata: RelationMetadata) => {
+                    if (relationMetadata.cascade === true) {
+                        const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
+                            relationMetadata.relatedClass,
+                        );
+
+                        const relatedCollectionRepo = collectionMetadata.model;
+                        const propertyName = relationMetadata.propertyName;
+
+                        const collectionData = await MongooseModel.find(obj);
+
+                        collectionData.forEach((item) => {
+                            relatedCollectionRepo
+                                .deleteOne({
+                                    _id: item[propertyName]._id,
+                                })
+                                .then((res) => console.log(res))
+                                .catch((err) => console.log(err));
+                        });
+
+                        MongooseModel.deleteOne(obj)
+                            .then((res) => console.log(res))
+                            .catch((err) => console.log(err));
+                    } else {
+                    }
+                },
+            );
         };
 
         const metaData = new CollectionMetadata(

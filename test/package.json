@@ -6,6 +6,7 @@
         "ajeets": "node --inspect -r ts-node/register src/ajeets.ts",
         "koushik": "node --inspect -r ts-node/register src/koushik.ts",
         "start": "ts-node -r tsconfig-paths/register src/app.ts",
+        "jeetu": "ts-node -r tsconfig-paths/register src/jeetu.ts",
         "lint": "tslint -p tsconfig.json -c tslint.json",
         "start:dev": "nodemon"
     },

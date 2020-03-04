@@ -33,4 +33,5 @@ export interface Repository<Entity> {
     findById2: (id: string) => DocumentQuery<Document, Document, {}>;
     findTest: (entity: Partial<Entity>) => any;
     save: (entity: Entity) => Entity;
+    deleteOne: (obj: any) => any;
 }
