@@ -5,7 +5,6 @@ import { FieldMetadata } from '../../metadata/field.metadata';
 import * as mongoose from 'mongoose';
 import { RelationMetadata } from '../../metadata/relation.metadata';
 import { insertRelatedProps, prepareData, Promises, prepareDataArray } from './document.helper';
-import { resolve } from 'dns';
 
 export function document(options: DocumentOptions) {
     return (target: Function) => {
@@ -89,13 +88,13 @@ export function document(options: DocumentOptions) {
         // refactor
         repo.deleteOne = async (obj: any) => {
             function deleteChildDocuments(): Promise<boolean> {
-                return new Promise(async (resolve1) => {
+                return new Promise(async (resolve) => {
                     const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
                         target,
                     );
                     const size = relationMetadatas.length;
                     if (!size) {
-                        resolve1(false);
+                        resolve(false);
                     }
 
                     const parentDocuments = await MongooseModel.find(obj);
@@ -116,7 +115,7 @@ export function document(options: DocumentOptions) {
                                 }); // make it concurrent
                                 console.log('deleted', result, propertyName);
                                 if (index === size - 1) {
-                                    resolve1(true);
+                                    resolve(true);
                                 }
                             });
                         }
