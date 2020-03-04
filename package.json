@@ -8,6 +8,7 @@
         "start": "ts-node -r tsconfig-paths/register src/main.ts",
         "start:ajeets": "cd test && npm run ajeets",
         "start:koushik": "cd test && npm run koushik",
+        "start:jeetu": "cd test && npm run jeetu",
         "start:test": "cd test && npm run start",
         "start:dev": "nodemon",
         "start:prod": "node dist/main.js",
