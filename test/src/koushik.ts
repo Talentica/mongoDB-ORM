@@ -33,4 +33,7 @@ const userRepo = getRepository<User>(User);
  */
 
 const id = '5e5e89865029e1194599a935'; // TODO : pick an id from your db
-userRepo.findById2(id);
+// userRepo.findById2(id);
+const result = userRepo.find({ name: 'Thor' });
+
+console.log('Result --->>> ', result);

@@ -5,7 +5,7 @@ export interface Repository<Entity> {
     intertMany: (entities: Entity[]) => Promise<mongoose.Document[]>;
     find: (entity: Entity) => mongoose.DocumentQuery<mongoose.Document[], mongoose.Document, {}>;
     findById2: (id: string) => mongoose.DocumentQuery<mongoose.Document, mongoose.Document, {}>;
-    findTest: (entity: Partial<Entity>) => any;
+    // find: (entity: Partial<Entity>) => any;
     save: (entity: Entity) => Entity;
     deleteOne: (obj: any) => mongoose.DocumentQuery<any, any, any>;
 }

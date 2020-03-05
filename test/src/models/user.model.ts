@@ -15,7 +15,7 @@ export class User {
         relatedClass: Profile,
         cascade: true,
         eager: true,
-        embedded: true,
+        embedded: false,
         type: 'Object',
     })
     profile: Profile;
@@ -25,7 +25,7 @@ export class User {
         relatedClass: Banking,
         cascade: true,
         eager: true,
-        embedded: true,
+        embedded: false,
         type: 'Object',
     })
     banking: Banking;
