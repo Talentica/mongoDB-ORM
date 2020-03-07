@@ -20,13 +20,13 @@ export class User {
     })
     profile: Profile;
 
-    @oneToOne({
-        targetCollection: 'banking',
-        relatedClass: Banking,
-        cascade: true,
-        eager: true,
-        embedded: false,
-        type: 'Object',
-    })
-    banking: Banking;
+    // @oneToOne({
+    //     targetCollection: 'banking',
+    //     relatedClass: Banking,
+    //     cascade: true,
+    //     eager: true,
+    //     embedded: true,
+    //     type: 'Object',
+    // })
+    // banking: Banking;
 }

@@ -29,10 +29,6 @@ export function document(options: DocumentOptions) {
             return MongooseModel.insertMany(preparedData);
         };
 
-        // repo.find = (data?: Object) => {
-        //     return MongooseModel.find(data);
-        // };
-
         // repo.findById2 = async (id: string) => {
         //     const promise: any = MongooseModel.findById(id);
         //     const user: any = await promise;
@@ -55,33 +51,33 @@ export function document(options: DocumentOptions) {
         repo.find = async (obj?: any) => {
             // koushik
             const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(target);
-            const data = await relationMetadatas.forEach(
-                async (relationMetadata: RelationMetadata) => {
-                    if (relationMetadata.embedded) {
-                        return MongooseModel.find(obj);
-                    }
-                    if (relationMetadata.eager && !relationMetadata.embedded) {
-                        // TODO get data from other collection and display with the current collection
-                        const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
-                            relationMetadata.relatedClass,
+            const data = await relationMetadatas.map(async (relationMetadata: RelationMetadata) => {
+                if (relationMetadata.embedded) {
+                    return MongooseModel.find(obj);
+                }
+                if (relationMetadata.eager && !relationMetadata.embedded) {
+                    // TODO get data from other collection and display with the current collection
+                    const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
+                        relationMetadata.relatedClass,
+                    );
+
+                    const relatedCollectionRepo = collectionMetadata.model;
+
+                    const collectionData = await MongooseModel.find(obj);
+                    collectionData.map(async (item) => {
+                        // console.log(
+                        //     'relatedCollectionData  --->>> ',
+                        //     await relatedCollectionRepo.find(),
+                        // );
+                        const relatedCollectionData: mongoose.Document[] = await relatedCollectionRepo.findById(
+                            item[relationMetadata.targetCollection]._id,
                         );
+                        collectionData[relationMetadata.targetCollection] = relatedCollectionData;
+                    });
+                    return collectionData;
+                }
+            });
 
-                        const relatedCollectionRepo = collectionMetadata.model;
-
-                        const collectionData = await MongooseModel.find(obj);
-                        collectionData.map(async (item) => {
-                            const relatedCollectionData: mongoose.Document[] = await relatedCollectionRepo.findById(
-                                item[relationMetadata.targetCollection]._id,
-                            );
-                            collectionData[
-                                relationMetadata.targetCollection
-                            ] = relatedCollectionData;
-                        });
-                        return collectionData;
-                    }
-                },
-            );
-            console.log('Data --->>> ', data);
             return data;
         };
 
