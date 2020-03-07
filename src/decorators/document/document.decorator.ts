@@ -96,6 +96,37 @@ export function document(options: DocumentOptions) {
             });
         };
 
+        repo.findById = async (id: string): Promise<mongoose.Document> => {
+            // koushik
+            return new Promise(async (resolve) => {
+                const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
+                    target,
+                );
+
+                relationMetadatas.forEach(async (relationMetadata: RelationMetadata) => {
+                    if (relationMetadata.embedded) {
+                        return await MongooseModel.findById(id);
+                    }
+                    if (relationMetadata.eager && !relationMetadata.embedded) {
+                        // TODO get data from other collection and display with the current collection
+                        console.log('Test');
+                        const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
+                            relationMetadata.relatedClass,
+                        );
+
+                        const relatedCollectionRepo = collectionMetadata.model;
+
+                        const collectionData = await MongooseModel.findById(id);
+                        const relatedCollectionData: mongoose.Document[] = await relatedCollectionRepo.findById(
+                            collectionData[relationMetadata.targetCollection]._id,
+                        );
+                        collectionData[relationMetadata.targetCollection] = relatedCollectionData;
+                        resolve(collectionData);
+                    }
+                });
+            });
+        };
+
         // refactor
         repo.deleteOne = async (obj: any) => {
             function deleteChildDocuments(): Promise<boolean> {

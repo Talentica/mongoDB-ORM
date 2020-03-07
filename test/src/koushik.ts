@@ -36,8 +36,11 @@ const id = '5e5e89865029e1194599a935'; // TODO : pick an id from your db
 // userRepo.findById2(id);
 const findResult = userRepo.find({ name: 'Thor' });
 const findOneResult = userRepo.findOne({ name: 'Thor' });
+const findByIdResult = userRepo.findById('5e6085c8df69e22a00128091');
 
 // console.log('Result --->>> ', result);
 // findResult.then((data) => console.log('Dtata --->>> ', data));
 
-findOneResult.then((data) => console.log('Find One Result', data));
+// findOneResult.then((data) => console.log('Find One Result', data));
+
+findByIdResult.then((data) => console.log('Find By Id Result', data));
