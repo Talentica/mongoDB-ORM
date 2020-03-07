@@ -127,8 +127,51 @@ export function document(options: DocumentOptions) {
             });
         };
 
-        // refactor
         repo.deleteOne = async (obj: any) => {
+            function deleteChildDocuments(): Promise<boolean> {
+                return new Promise(async (resolve) => {
+                    const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
+                        target,
+                    );
+                    const size = relationMetadatas.length;
+                    if (!size) {
+                        resolve(false);
+                    }
+
+                    relationMetadatas.forEach(async (relationMetadata: RelationMetadata, index) => {
+                        if (relationMetadata.cascade) {
+                            const parentDocuments = await MongooseModel.findOne(obj);
+                            if (parentDocuments) {
+                                console.log('found parent docs', parentDocuments);
+
+                                const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
+                                    relationMetadata.relatedClass,
+                                );
+
+                                const relatedCollectionModel = collectionMetadata.model;
+                                const propertyName = relationMetadata.propertyName;
+
+                                const result = await relatedCollectionModel.deleteOne({
+                                    _id: parentDocuments[propertyName]._id,
+                                });
+                                console.log('deleted', result, propertyName);
+                            } else {
+                                console.log('No parent docs found');
+                            }
+                        }
+
+                        if (index === size - 1) {
+                            resolve(true);
+                        }
+                    });
+                });
+            }
+            const deleted = await deleteChildDocuments();
+            console.log('deleted children, returning', deleted);
+            return MongooseModel.deleteOne(obj);
+        };
+        // refactor
+        repo.deleteMany = async (obj: any) => {
             function deleteChildDocuments(): Promise<boolean> {
                 return new Promise(async (resolve) => {
                     const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
