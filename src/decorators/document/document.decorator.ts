@@ -187,7 +187,7 @@ export function document(options: DocumentOptions) {
 
                     relationMetadatas.forEach((relationMetadata: RelationMetadata, index) => {
                         if (relationMetadata.cascade) {
-                            // todo
+                            // TODO: Make it concurrent
                             const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
                                 relationMetadata.relatedClass,
                             );
@@ -197,7 +197,7 @@ export function document(options: DocumentOptions) {
                             parentDocuments.forEach(async (item) => {
                                 const result = await relatedCollectionModel.deleteOne({
                                     _id: item[propertyName]._id,
-                                }); // make it concurrent
+                                });
                                 console.log('deleted', result, propertyName);
                                 if (index === size - 1) {
                                     resolve(true);
@@ -209,7 +209,7 @@ export function document(options: DocumentOptions) {
             }
             const deleted = await deleteChildDocuments();
             console.log('deleted children, returning', deleted);
-            return MongooseModel.deleteOne(obj);
+            return MongooseModel.deleteMany(obj);
         };
 
         const metaData = new CollectionMetadata(target, options.name, MongooseModel, repo);
