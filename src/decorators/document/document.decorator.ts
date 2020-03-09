@@ -138,39 +138,42 @@ export function document(options: DocumentOptions) {
                         resolve(false);
                     }
 
-                    relationMetadatas.forEach(async (relationMetadata: RelationMetadata, index) => {
-                        if (relationMetadata.cascade) {
-                            const parentDocuments = await MongooseModel.findOne(obj);
-                            if (parentDocuments) {
-                                console.log('found parent docs', parentDocuments);
+                    const parentDocuments = await MongooseModel.findOne(obj);
 
-                                const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
-                                    relationMetadata.relatedClass,
-                                );
+                    if (parentDocuments) {
+                        console.log('found parent docs', parentDocuments);
+                        relationMetadatas.forEach(
+                            async (relationMetadata: RelationMetadata, index) => {
+                                if (relationMetadata.cascade) {
+                                    const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
+                                        relationMetadata.relatedClass,
+                                    );
 
-                                const relatedCollectionModel = collectionMetadata.model;
-                                const propertyName = relationMetadata.propertyName;
+                                    const relatedCollectionModel = collectionMetadata.model;
+                                    const propertyName = relationMetadata.propertyName;
 
-                                const result = await relatedCollectionModel.deleteOne({
-                                    _id: parentDocuments[propertyName]._id,
-                                });
-                                console.log('deleted', result, propertyName);
-                            } else {
-                                console.log('No parent docs found');
-                            }
-                        }
+                                    const result = await relatedCollectionModel.deleteOne({
+                                        _id: parentDocuments[propertyName]._id,
+                                    });
+                                    console.log('deleted', result, propertyName);
+                                }
 
-                        if (index === size - 1) {
-                            resolve(true);
-                        }
-                    });
+                                if (index === size - 1) {
+                                    resolve(true);
+                                }
+                            },
+                        );
+                    } else {
+                        console.log('No parent docs found');
+                        resolve(true);
+                    }
                 });
             }
             const deleted = await deleteChildDocuments();
             console.log('deleted children, returning', deleted);
             return MongooseModel.deleteOne(obj);
         };
-        // refactor
+
         repo.deleteMany = async (obj: any) => {
             function execDelete(relatedCollectionModel, item, propertyName) {
                 return new Promise(async (resolve, reject) => {
@@ -194,35 +197,43 @@ export function document(options: DocumentOptions) {
                     const relationMetadatas = defaultMetadataStorage.findRelationMetadatasForClass(
                         target,
                     );
+
                     const size = relationMetadatas.length;
                     if (!size) {
                         resolve(false);
                     }
 
                     const parentDocuments = await MongooseModel.find(obj);
+                    if (parentDocuments) {
+                        console.log('found parent docs', parentDocuments);
+                        relationMetadatas.forEach(
+                            async (relationMetadata: RelationMetadata, index) => {
+                                if (relationMetadata.cascade) {
+                                    const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
+                                        relationMetadata.relatedClass,
+                                    );
+                                    const relatedCollectionModel = collectionMetadata.model;
+                                    const propertyName = relationMetadata.propertyName;
 
-                    relationMetadatas.forEach(async (relationMetadata: RelationMetadata, index) => {
-                        if (relationMetadata.cascade) {
-                            const collectionMetadata = defaultMetadataStorage.findCollectionMetadatasForClass(
-                                relationMetadata.relatedClass,
-                            );
-                            const relatedCollectionModel = collectionMetadata.model;
-                            const propertyName = relationMetadata.propertyName;
+                                    let promises = [];
+                                    parentDocuments.forEach((item) => {
+                                        promises.push(
+                                            execDelete(relatedCollectionModel, item, propertyName),
+                                        );
+                                    });
 
-                            let promises = [];
-                            parentDocuments.forEach((item) => {
-                                promises.push(
-                                    execDelete(relatedCollectionModel, item, propertyName),
-                                );
-                            });
-
-                            await Promise.all(promises)
-                                .then((res) => {
-                                    if (index === size - 1) resolve(true);
-                                })
-                                .catch((err) => console.log('Error Occured', err));
-                        }
-                    });
+                                    await Promise.all(promises)
+                                        .then((res) => {
+                                            if (index === size - 1) resolve(true);
+                                        })
+                                        .catch((err) => console.log('Error Occured', err));
+                                }
+                            },
+                        );
+                    } else {
+                        console.log('No parent docs found');
+                        resolve(true);
+                    }
                 });
             }
             const deleted = await deleteChildDocuments();
