@@ -215,7 +215,7 @@ export function document(options: DocumentOptions) {
                                     const relatedCollectionModel = collectionMetadata.model;
                                     const propertyName = relationMetadata.propertyName;
 
-                                    let promises = [];
+                                    const promises = [];
                                     parentDocuments.forEach((item) => {
                                         promises.push(
                                             execDelete(relatedCollectionModel, item, propertyName),
@@ -224,7 +224,9 @@ export function document(options: DocumentOptions) {
 
                                     await Promise.all(promises)
                                         .then((res) => {
-                                            if (index === size - 1) resolve(true);
+                                            if (index === size - 1) {
+                                                resolve(true);
+                                            }
                                         })
                                         .catch((err) => console.log('Error Occured', err));
                                 }
